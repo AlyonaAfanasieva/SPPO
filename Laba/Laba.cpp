@@ -1,46 +1,67 @@
 ﻿#include <iostream>
-#include <cmath>
 
 using namespace std;
 
-double f1(double n) {
-	double v;
-	if (n < 0)
-		v = -n - 2;
-	else
-		v = 5 * (n * n * n) + 2 * (n * n);
-	return v;
+struct element {                
+	int value;
+	element* pointer;
+	element() {
+		value = 0;
+		pointer = NULL;
+	}
+};
+
+void Input(element*& first, int n) {       
+	element* p = first;
+	int i = 0;
+	while (i < n) {
+		element* pl = new element();
+		cin >> pl->value;          
+		if (first == NULL) {
+			first = pl;
+			p = pl;
+		}
+		else {
+			p->pointer = pl;
+			p = pl;
+		}
+		i++;
+	}
 }
 
-double f2(double& m) {
-	m = f1(m);
-	return m;
+void Out(element* l) {  
+	while (l != NULL) {
+		cout << l->value << " ";
+		l = l->pointer;
+	}
+	cout << endl;
+}
+
+void AddToList(element* l, int n) { 
+	element* p = l;
+	l = l->pointer;
+	while (l != NULL) {
+		element* el = new element();
+		el->value = n;
+		el->pointer = l;
+		p->pointer = el;
+		p = l;
+		l = l->pointer;
+	}
 }
 
 int main() {
 	setlocale(LC_ALL, "rus");
 
-	double x, y, b;
-	cout << "Введите первое значение ";
-	cin >> x;
-	cout << "Введите шаг ";
-	cin >> b;
-	cout << "Введите количество ";
-	cin >> y;
-
-	double n = x;
-
-	for (int i = 1; i <= y; i++, x += b) {
-		cout << "К значению " << x << " результат " << f1(x);
-		cout << endl;
-	}
-	cout << endl;
-	for (int i = 1; i <= y; i++, x += b) {
-
-		cout << " К значению " << x << endl;
-		cout << " результат " << f2(x);
-		cout << endl;
-	}
+	element* first = NULL;
+	int N;
+	cout << "Введите длину массива = ";
+	cin >> N;
+	cout << "Введите элементы массива = ";
+	Input(first, N);               
+	Out(first);                       
+	AddToList(first, 0);               
+	Out(first);                        
 
 	system("pause");
 	return 0;
